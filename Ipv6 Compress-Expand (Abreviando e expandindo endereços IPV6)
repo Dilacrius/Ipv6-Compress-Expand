@@ -107,7 +107,6 @@
                 replace = true
             }
             else if (((compac_02.indexOf(':0:0') > -1) || (compac_02.indexOf('0:0:') > -1)) && (replace == false)) {
-                console.log(compac_02)
                 if (compac_02.indexOf(':0:0:') > -1) {
                     compac_02 = compac_02.replace('0:0', ':');
                 }
@@ -132,14 +131,12 @@
     // Função descompactar
     function expandir() {
         expand_01 = document.getElementById("expand_01").value;
-        expand_02 = ''
 
         // Verifica se tem ::
         if (expand_01.indexOf('::') > -1) {
             var contagem = 0
             var split_expand_01 = expand_01.split('', expand_01.length)
             var zeros = ''
-            console.log(split_expand_01)
 
             // Contagem de quantos :: existem
             for (i = 0; i <= expand_01.length; i++) {
@@ -150,10 +147,28 @@
 
             // Definição de quantos :: serão convertidos em 0000
             if (contagem == 2) {
-                contagem = 7
+                if (expand_01.length == 4) {
+                    contagem = 6
+                }
+                else {
+                    contagem = 7
+                }
             }
             else {
-                contagem = 8 - contagem
+                if (expand_01.indexOf('::') == 0) {
+                    contagem = 9 - contagem
+                }
+                else if (expand_01.indexOf('::') == expand_01.length - 2) {
+                    if (expand_01.length >= 4 ) {
+                        contagem = 8 - contagem
+                    }
+                    else{
+                        contagem = 7 - contagem
+                    }
+                }
+                else{
+                    contagem = 8 - contagem
+                }
             }
 
             // Adicionando os 0000
@@ -165,7 +180,7 @@
                     zeros = zeros + '0000:'
                 }
             }
-
+            
             // Voltando os 0000 a variavel
             if (expand_01.indexOf('::') == 0) {
                 if (expand_01.length > 2) {
@@ -182,9 +197,10 @@
                 expand_01 = expand_01.replace('::', ':' + zeros + ':');
             }
         }
-
+        
         // Adiconando os 0 aonde falta
-        split_expand_01 = expand_01.split(':', 8)
+        split_expand_01 = expand_01.split(':');
+
         expand_01 = ''
         for (i = 0; i <= 7; i++) {
             if (split_expand_01[i].length == 1) {
@@ -209,9 +225,7 @@
 
         }
         
-        // jogando tudo do expando para variavel expand 2
-        expand_02 = expand_01
-        document.getElementById("expand_02").value = expand_02;
+        document.getElementById("expand_02").value = expand_01;
     }
 
 </script>

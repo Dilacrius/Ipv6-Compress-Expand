@@ -147,11 +147,11 @@
 
             // Definição de quantos :: serão convertidos em 0000
             if (contagem == 2) {
-                if (expand_01.length == 4) {
-                    contagem = 6
+                if (expand_01.length == 3) {
+                    contagem = 7
                 }
                 else {
-                    contagem = 7
+                    contagem = 6
                 }
             }
             else {
@@ -181,6 +181,7 @@
                 }
             }
             
+            console.log(expand_01)
             // Voltando os 0000 a variavel
             if (expand_01.indexOf('::') == 0) {
                 if (expand_01.length > 2) {
@@ -198,6 +199,7 @@
             }
         }
         
+        console.log(expand_01)
         // Adiconando os 0 aonde falta
         split_expand_01 = expand_01.split(':');
 

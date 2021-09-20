@@ -146,8 +146,8 @@
             }
 
             // Definição de quantos :: serão convertidos em 0000
-            if (contagem == 2) {
-                if (expand_01.length == 3) {
+            if (contagem == 3) {
+                if (expand_01.length == 2) {
                     contagem = 7
                 }
                 else {
@@ -189,6 +189,7 @@
                 }
                 else {
                     expand_01 = expand_01.replace('::', zeros + ':0000');
+                    console.log("chegou aqui")
                 }
             }
             else if (expand_01.indexOf('::') == expand_01.length - 2) {

@@ -146,11 +146,17 @@
             }
 
             // Definição de quantos :: serão convertidos em 0000
-            if (contagem == 3) {
+            if (contagem == 2) {
                 if (expand_01.length == 2) {
+                    contagem = 8
+                }
+                else if (expand_01.indexOf('::') == 0){
                     contagem = 7
                 }
-                else {
+                else if (expand_01.indexOf('::') == expand_01.length - 2){
+                    contagem = 7
+                }
+                else{
                     contagem = 6
                 }
             }
@@ -159,12 +165,7 @@
                     contagem = 9 - contagem
                 }
                 else if (expand_01.indexOf('::') == expand_01.length - 2) {
-                    if (expand_01.length >= 4 ) {
-                        contagem = 8 - contagem
-                    }
-                    else{
-                        contagem = 7 - contagem
-                    }
+                    contagem = 9 - contagem
                 }
                 else{
                     contagem = 8 - contagem

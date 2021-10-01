@@ -1,5 +1,5 @@
 <html>
-<meta charset="utf-8">  
+<meta charset="utf-8">
 
 <head>
     <title>Abreviando e expandindo endereços IPV6</title>
@@ -13,14 +13,31 @@
 </style>
 
 <script>
+    // Função validação
+    function validacao(dado) {
+        const regexp = new RegExp("^(?:(?:(?:[A-F0-9]{1,4}:){5}[A-F0-9]{1,4}|(?:[A-F0-9]{1,4}:){4}:[A-F0-9]{1,4}|(?:[A-F0-9]{1,4}:){3}(?::[A-F0-9]{1,4}){1,2}|(?:[A-F0-9]{1,4}:){2}(?::[A-F0-9]{1,4}){1,3}|[A-F0-9]{1,4}:(?::[A-F0-9]{1,4}){1,4}|(?:[A-F0-9]{1,4}:){1,5}|:(?::[A-F0-9]{1,4}){1,5}|:):(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])|(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}|(?:[A-F0-9]{1,4}:){6}:[A-F0-9]{1,4}|(?:[A-F0-9]{1,4}:){5}(?::[A-F0-9]{1,4}){1,2}|(?:[A-F0-9]{1,4}:){4}(?::[A-F0-9]{1,4}){1,3}|(?:[A-F0-9]{1,4}:){3}(?::[A-F0-9]{1,4}){1,4}|(?:[A-F0-9]{1,4}:){2}(?::[A-F0-9]{1,4}){1,5}|[A-F0-9]{1,4}:(?::[A-F0-9]{1,4}){1,6}|(?:[A-F0-9]{1,4}:){1,7}:|:(?::[A-F0-9]{1,4}){1,7}|::)$");
+        var condicao = regexp.test(dado);
+        if (condicao == true) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 
     // Função compactar
     function compactar() {
         var compac_01 = document.getElementById("compac_01").value;
         var compac_02 = "";
 
-        // Verificação se tem 39 caracteres
-        if (compac_01.length == 39) {
+        // Verificação se e um ipv6 valido
+        if ((compac_01.length == 39) && (validacao(compac_01) == true)) {
             var split_compac_01 = compac_01.split(':', 8);
             for (var i = 0; i <= 7; i++) {
 
@@ -128,108 +145,119 @@
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+
     // Função descompactar
     function expandir() {
         expand_01 = document.getElementById("expand_01").value;
 
-        // Verifica se tem ::
-        if (expand_01.indexOf('::') > -1) {
-            var contagem = 0
-            var split_expand_01 = expand_01.split('', expand_01.length)
-            var zeros = ''
+        if (validacao(expand_01) == true) {
+            // Verifica se tem ::
+            if (expand_01.indexOf('::') > -1) {
+                var contagem = 0
+                var split_expand_01 = expand_01.split('', expand_01.length)
+                var zeros = ''
 
-            // Contagem de quantos :: existem
-            for (i = 0; i <= expand_01.length; i++) {
-                if (split_expand_01[i] == ":") {
-                    contagem = contagem + 1
+                // Contagem de quantos :: existem
+                for (i = 0; i <= expand_01.length; i++) {
+                    if (split_expand_01[i] == ":") {
+                        contagem = contagem + 1
+                    }
                 }
-            }
 
-            // Definição de quantos :: serão convertidos em 0000
-            if (contagem == 2) {
-                if (expand_01.length == 2) {
-                    contagem = 8
+                // Definição de quantos :: serão convertidos em 0000
+                if (contagem == 2) {
+                    if (expand_01.length == 2) {
+                        contagem = 8
+                    }
+                    else if (expand_01.indexOf('::') == 0) {
+                        contagem = 7
+                    }
+                    else if (expand_01.indexOf('::') == expand_01.length - 2) {
+                        contagem = 7
+                    }
+                    else {
+                        contagem = 6
+                    }
                 }
-                else if (expand_01.indexOf('::') == 0){
-                    contagem = 7
+                else {
+                    if (expand_01.indexOf('::') == 0) {
+                        contagem = 9 - contagem
+                    }
+                    else if (expand_01.indexOf('::') == expand_01.length - 2) {
+                        contagem = 9 - contagem
+                    }
+                    else {
+                        contagem = 8 - contagem
+                    }
                 }
-                else if (expand_01.indexOf('::') == expand_01.length - 2){
-                    contagem = 7
+
+                // Adicionando os 0000
+                for (i = 1; i <= contagem; i++) {
+                    if (i == contagem) {
+                        zeros = zeros + '0000'
+                    }
+                    else {
+                        zeros = zeros + '0000:'
+                    }
                 }
-                else{
-                    contagem = 6
-                }
-            }
-            else {
+
+                console.log(expand_01)
+                // Voltando os 0000 a variavel
                 if (expand_01.indexOf('::') == 0) {
-                    contagem = 9 - contagem
+                    if (expand_01.length > 2) {
+                        expand_01 = expand_01.replace('::', zeros + ':');
+                    }
+                    else {
+                        expand_01 = expand_01.replace('::', zeros + ':0000');
+                        console.log("chegou aqui")
+                    }
                 }
                 else if (expand_01.indexOf('::') == expand_01.length - 2) {
-                    contagem = 9 - contagem
+                    expand_01 = expand_01.replace('::', ':' + zeros + ':0000');
                 }
-                else{
-                    contagem = 8 - contagem
+                else {
+                    expand_01 = expand_01.replace('::', ':' + zeros + ':');
                 }
             }
 
-            // Adicionando os 0000
-            for (i = 1; i <= contagem; i++) {
-                if (i == contagem) {
-                    zeros = zeros + '0000'
-                }
-                else {
-                    zeros = zeros + '0000:'
-                }
-            }
-            
             console.log(expand_01)
-            // Voltando os 0000 a variavel
-            if (expand_01.indexOf('::') == 0) {
-                if (expand_01.length > 2) {
-                    expand_01 = expand_01.replace('::', zeros + ':');
+            // Adiconando os 0 aonde falta
+            split_expand_01 = expand_01.split(':');
+
+            expand_01 = ''
+            for (i = 0; i <= 7; i++) {
+                if (split_expand_01[i].length == 1) {
+                    split_expand_01[i] = '000' + split_expand_01[i];
+                }
+                else if (split_expand_01[i].length == 2) {
+                    split_expand_01[i] = '00' + split_expand_01[i];
+                }
+
+                else if (split_expand_01[i].length == 3) {
+                    split_expand_01[i] = '0' + split_expand_01[i];
+                }
+
+                // Adiciona os : após terem sido retirados
+
+                if (i == 0) {
+                    expand_01 = expand_01 + split_expand_01[i]
                 }
                 else {
-                    expand_01 = expand_01.replace('::', zeros + ':0000');
-                    console.log("chegou aqui")
+                    expand_01 = expand_01 + ':' + split_expand_01[i]
                 }
+
             }
-            else if (expand_01.indexOf('::') == expand_01.length - 2) {
-                expand_01 = expand_01.replace('::', ':' + zeros + ':0000');
-            }
-            else {
-                expand_01 = expand_01.replace('::', ':' + zeros + ':');
-            }
+
+            document.getElementById("expand_02").value = expand_01;
         }
-        
-        console.log(expand_01)
-        // Adiconando os 0 aonde falta
-        split_expand_01 = expand_01.split(':');
-
-        expand_01 = ''
-        for (i = 0; i <= 7; i++) {
-            if (split_expand_01[i].length == 1) {
-                split_expand_01[i] = '000' + split_expand_01[i];
-            }
-            else if (split_expand_01[i].length == 2) {
-                split_expand_01[i] = '00' + split_expand_01[i];
-            }
-
-            else if (split_expand_01[i].length == 3) {
-                split_expand_01[i] = '0' + split_expand_01[i];
-            }
-
-            // Adiciona os : após terem sido retirados
-
-            if (i == 0) {
-                expand_01 = expand_01 + split_expand_01[i]
-            }
-            else {
-                expand_01 = expand_01 + ':' + split_expand_01[i]
-            }
-
-        }
-        
-        document.getElementById("expand_02").value = expand_01;
+         else {
+            window.alert("Caracteres invalidos.");
+         }
     }
 
 </script>
